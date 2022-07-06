@@ -68,6 +68,7 @@ class _StopWatchState extends State<StopWatch> {
       ElevatedButton(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow),
+          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
         ),
         child: Text('Lap'),
         onPressed: isTicking ? _lap : null,
@@ -114,15 +115,31 @@ class _StopWatchState extends State<StopWatch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Stopwatch'),
-        ),
-        body: _buildCounter(context));
+      appBar: AppBar(
+        title: Text('Stopwatch'),
+      ),
+      body: Column(
+        children: <Widget>[
+          Expanded(child: _buildCounter(context)),
+          Expanded(child: _buildLapDisplay()),
+        ],
+      ),
+    );
+    //  _buildCounter(context));
   }
 
   String _secondsText(int milliseconds) {
     final seconds = milliseconds / 1000;
     return '$seconds seconds';
+  }
+
+  Widget _buildLapDisplay() {
+    return ListView(children: [
+      for (int milliseconds in laps)
+        ListTile(
+          title: Text(_secondsText(milliseconds)),
+        )
+    ]);
   }
 
   @override
